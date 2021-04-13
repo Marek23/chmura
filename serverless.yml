@@ -24,7 +24,18 @@ provider:
   name: aws
   runtime: nodejs12.x
   stage: dev
-  lambdaHashingVersion: 20201221
+  region: eu-central-1
+  environment:
+    CANDIDATE_TABLE: ${self:service}-${opt:stage, self:provider.stage}
+    CANDIDATE_EMAIL_TABLE: "candidate-email-${opt:stage, self:provider.stage}"
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:Query
+        - dynamodb:Scan
+        - dynamodb:GetItem
+        - dynamodb:PutItem
+      Resource: "*"
 
 # you can overwrite defaults here
 #  stage: dev
